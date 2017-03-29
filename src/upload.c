@@ -21,17 +21,19 @@ char* strip_json(char* response)
 	// mainly for pomf clones
 
 	// cba to do json parsing
-	char* start = strstr(response, "url\":\"") + 6;
+	char* start = strstr(response, "url\":") + 6;
 	char* end = strstr(start, ".jpg") + 4;
 	*end = 0;
 	int len = (int)(end - start);
 	char* result = (char*)malloc(sizeof(char) * len);
 
-	// get rid of every backslash
 	int j = 0;
 	for (int i = 0; i < len; i++)
 	{
-		if (start[i] == '\\')
+		if (start[i] == '\\'
+		 || start[i] == ' '
+		 || start[i] == '\"'
+		 || start[i] == '\n')
 		{
 			continue;
 		}
@@ -56,6 +58,14 @@ char* pomf_cat(char* response)
 	return result;
 }
 
+char* do_nothing(char* response)
+{
+	char* result = (char*)malloc(sizeof(char) * strlen(response));
+	strcpy(result, response);
+	free(response);
+	return result;
+}
+
 host_t hosts[] = {
 		{ "0x0.st", "file", "https://0x0.st/", &remove_newline },
 		{ "mixtape.moe", "files[]", "https://mixtape.moe/upload.php", &strip_json },
@@ -64,7 +74,12 @@ host_t hosts[] = {
 		{ "safe.moe", "files[]", "https://safe.moe/api/upload", &strip_json },
 		{ "cocaine.ninja", "files[]", "https://cocaine.ninja/upload.php?output=text", &remove_newline },
 		{ "comfy.moe", "files[]", "https://comfy.moe/upload.php", &strip_json },
-		{ "pomf.cat", "files[]", "https://pomf.cat/upload.php", &pomf_cat }
+		{ "pomf.cat", "files[]", "https://pomf.cat/upload.php", &pomf_cat },
+		{ "lewd.se", "file", "https://lewd.se/api.php?d=upload-tool", &do_nothing },
+		{ "memenet.org", "files[]", "https://memenet.org/upload.php", &strip_json },
+		{ "uguu.se", "file", "https://uguu.se/api.php?d=upload-tool", &do_nothing },
+		{ "yiff.moe", "files[]", "https://yiff.moe/upload.php", &strip_json },
+		{ "vidga.me", "files[]", "https://vidga.me/upload.php", &strip_json }
 };
 
 struct string

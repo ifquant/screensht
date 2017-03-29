@@ -11,6 +11,6 @@ typedef struct
 
 char* upload_sht(char* filename);
 
-extern host_t hosts[8];
+extern host_t hosts[13];
 
 #endif
