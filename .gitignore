@@ -1,0 +1,12 @@
+screensht
+
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+
+.idea/
+
+*.so
+*.o
+*.cbp
