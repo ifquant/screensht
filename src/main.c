@@ -25,7 +25,7 @@ void notify(char* url, float time)
 void copy_to_clipboard(char* text)
 {
 	char buffer[256];
-	sprintf(buffer, "echo \"%s\" | xsel -i -b", text);
+	sprintf(buffer, "echo \"%s\" | xclip -selection clipboard", text);
 	system(buffer);
 }
 
@@ -33,6 +33,7 @@ char* rand_string(int n)
 {
 	char chars[] = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm";
 	char* result = malloc(sizeof(char) * (n - 1));
+
 	for (int i = 0; i < n; i++)
 	{
 		result[i] = chars[rand() % (sizeof(chars) - 1)];

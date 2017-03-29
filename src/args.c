@@ -1,16 +1,19 @@
 #include "args.h"
 
 #include <stdlib.h>
-#include <unistd.h>
 #include <stdio.h>
 #include <string.h>
 #include <limits.h>
 
 #include "display_info.h"
+#include "upload.h"
+
+args_t args;
 
 void args_init(int argc, char** argv)
 {
 	// defaults
+	args.host = hosts[0];
 	args.quality = 99;
 	args.directory = "./";
 	args.fontname = "*x14";
@@ -24,7 +27,27 @@ void args_init(int argc, char** argv)
 
 	for (int i = 1; i < argc; i++)
 	{
-		if (!strcmp(argv[i], "-q"))
+		if (!strcmp(argv[i], "-h"))
+		{
+			i++;
+			int hosts_n = sizeof(hosts) / sizeof(*hosts);
+			if (!strcmp(argv[i], "random"))
+			{
+				args.host = hosts[rand() % hosts_n];
+			}
+			else
+			{
+				for (int j = 0; j < hosts_n; j++)
+				{
+					if (!strcmp(argv[i], hosts[j].arg_name))
+					{
+						args.host = hosts[j];
+						break;
+					}
+				}
+			}
+		}
+		else if (!strcmp(argv[i], "-q"))
 		{
 			i++;
 			args.quality = atoi(argv[i]);
@@ -42,12 +65,12 @@ void args_init(int argc, char** argv)
 		else if (!strcmp(argv[i], "-c"))
 		{
 			i++;
-			args.color = strtol(argv[i], 0, 16);
+			args.color = (unsigned long)strtol(argv[i], 0, 16);
 		}
 		else if (!strcmp(argv[i], "-s"))
 		{
 			i++;
-			args.color_secondary = strtol(argv[i], 0, 16);
+			args.color_secondary = (unsigned long)strtol(argv[i], 0, 16);
 		}
 		else
 		{

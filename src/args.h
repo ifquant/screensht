@@ -1,8 +1,11 @@
 #ifndef ARGS_H
 #define ARGS_H
 
+#include "upload.h"
+
 typedef struct
 {
+	host_t host;
 	int quality;
 	char* directory;
 	char* fontname;
@@ -12,6 +15,6 @@ typedef struct
 
 void args_init(int argc, char** argv);
 
-args_t args;
+extern args_t args;
 
 #endif

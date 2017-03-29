@@ -4,6 +4,69 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "args.h"
+
+char* remove_newline(char* response)
+{
+	int len = (int)strlen(response) - 1;
+	char* result = (char*)malloc(sizeof(char) * len);
+	strncpy(result, response, (size_t)len);
+	result[len] = 0; // remove newline
+	free(response);
+	return result;
+}
+
+char* strip_json(char* response)
+{
+	// mainly for pomf clones
+
+	// cba to do json parsing
+	char* start = strstr(response, "url\":\"") + 6;
+	char* end = strstr(start, ".jpg") + 4;
+	*end = 0;
+	int len = (int)(end - start);
+	char* result = (char*)malloc(sizeof(char) * len);
+
+	// get rid of every backslash
+	int j = 0;
+	for (int i = 0; i < len; i++)
+	{
+		if (start[i] == '\\')
+		{
+			continue;
+		}
+
+		result[j] = start[i];
+		j++;
+	}
+
+	result[j] = 0;
+	free(response);
+	return result;
+}
+
+char* pomf_cat(char* response)
+{
+	char* append = strip_json(response);
+	const char* base = "https://a.pomf.cat/";
+	int len = (int)(strlen(base) + strlen(append));
+	char* result = (char*)malloc((size_t)len + 1);
+	memcpy(result, base, strlen(base));
+	memcpy(result + strlen(base), append, strlen(append) + 1);
+	return result;
+}
+
+host_t hosts[] = {
+		{ "0x0.st", "file", "https://0x0.st/", &remove_newline },
+		{ "mixtape.moe", "files[]", "https://mixtape.moe/upload.php", &strip_json },
+		{ "nya.is", "files[]", "https://nya.is/upload", &strip_json },
+		{ "p.fuwafuwa.moe", "files[]", "https://p.fuwafuwa.moe/upload.php", &strip_json },
+		{ "safe.moe", "files[]", "https://safe.moe/api/upload", &strip_json },
+		{ "cocaine.ninja", "files[]", "https://cocaine.ninja/upload.php?output=text", &remove_newline },
+		{ "comfy.moe", "files[]", "https://comfy.moe/upload.php", &strip_json },
+		{ "pomf.cat", "files[]", "https://pomf.cat/upload.php", &pomf_cat }
+};
+
 struct string
 {
 	char* data;
@@ -36,7 +99,7 @@ char* upload_sht(char* filename)
 			&post,
 			&lastptr,
 			CURLFORM_COPYNAME,
-			"file",
+			args.host.form_name,
 			CURLFORM_FILE,
 			filename,
 			CURLFORM_END
@@ -54,7 +117,7 @@ char* upload_sht(char* filename)
 		return buffer.data;
 	}
 
-	curl_easy_setopt(curl, CURLOPT_URL, "https://0x0.st");
+	curl_easy_setopt(curl, CURLOPT_URL, args.host.upload_url);
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, memory_callback);
 	curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*)&buffer);
 	curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
@@ -118,9 +181,7 @@ char* upload_sht(char* filename)
 	curl_easy_cleanup(curl);
 	curl_formfree(post);
 
-	char* result = strdup(buffer.data);
-	result[strlen(result) - 1] = 0; // remove newline
-	free(buffer.data);
+	printf("%s\n", buffer.data);
 
-	return result;
+	return args.host.convert_url(buffer.data);
 }
