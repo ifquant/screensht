@@ -4,6 +4,7 @@
 #include <sys/stat.h>
 #include <time.h>
 #include <string.h>
+#include <libnotify/notify.h>
 
 #include "area.h"
 #include "display_info.h"
@@ -18,8 +19,13 @@ void notify(char* url, float time)
 	printf("%s\nupload took %3.f ms\n", url, time);
 
 	char buffer[256];
-	sprintf(buffer, "notify-send \"%s\" \"upload took %3.f ms\"", url, time);
-	system(buffer);
+	sprintf(buffer, "upload took %3.f ms", time);
+
+	notify_init(url);
+	NotifyNotification* n = notify_notification_new(url, buffer, 0);
+	notify_notification_set_timeout(n, 2500);
+	notify_notification_show(n, 0);
+	g_object_unref(G_OBJECT(n));
 }
 
 void copy_to_clipboard(char* text)
