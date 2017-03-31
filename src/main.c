@@ -76,16 +76,13 @@ float get_elapsed(struct timeval start)
 {
 	struct timeval end;
 	gettimeofday(&end, 0);
-	float elapsed = (end.tv_sec - start.tv_sec) * 1000.f;
-	elapsed += (end.tv_usec - start.tv_usec) / 1000.f;
+	float elapsed = (end.tv_sec - start.tv_sec) * 1000.f + (end.tv_usec - start.tv_usec) / 1000.f;
 	return elapsed;
 }
 
 void mkpath(char* path)
 {
-	char* p;
-
-	for (p = strchr(path + 1, '/'); p; p = strchr(p + 1, '/'))
+	for (char* p = strchr(path + 1, '/'); p; p = strchr(p + 1, '/'))
 	{
 		*p = '\0';
 		mkdir(path, 0755);
