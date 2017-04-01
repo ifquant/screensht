@@ -76,6 +76,7 @@ void args_init(int argc, char** argv)
 		{
 			printf(
 					"options:\n"
+					"\t-h\thost\n"
 					"\t-q\tquality, 0-100\n"
 					"\t-d\tdirectory\n"
 					"\t-f\tfont name\n"
