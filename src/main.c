@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <sys/time.h>
 #include <sys/stat.h>
+#include <sys/file.h>
 #include <time.h>
 #include <string.h>
 #include <libnotify/notify.h>
@@ -104,9 +105,49 @@ void check_path()
 	}
 }
 
+int check_if_only_instance()
+{
+	int fd = open("/tmp/screensht.lock", O_CREAT | O_RDWR);
+
+	if (fd == -1)
+	{
+		printf("couldn't create lock file\n");
+		close(fd);
+		return 0;
+	}
+
+	struct flock file_lock;
+	file_lock.l_type = F_WRLCK;
+	file_lock.l_whence = SEEK_SET;
+	file_lock.l_start = 0;
+	file_lock.l_len = 0;
+	file_lock.l_pid = getpid();
+
+	if (fcntl(fd, F_SETLK, &file_lock) == -1)
+	{
+		close(fd);
+		return 0;
+	}
+
+	close(fd);
+
+	return 1;
+}
+
+void remove_lock_file()
+{
+	remove("/tmp/screensht.lock");
+}
+
 int main(int argc, char** argv)
 {
 	srand((unsigned int)time(0));
+
+	if (!check_if_only_instance())
+	{
+		printf("screensht is already running\n");
+		return 0;
+	}
 
 	display_info_init();
 	args_init(argc, argv);
@@ -117,16 +158,16 @@ int main(int argc, char** argv)
 	char* filename = get_filename();
 	area_t area = select_area();
 
+	window_info_kill(&window_info);
+
 	if (area_is_null(area))
 	{
 		printf("area is null\n");
-		window_info_kill(&window_info);
 		display_info_kill(&display_info);
 		free(filename);
+		remove_lock_file();
 		return 0;
 	}
-
-	window_info_kill(&window_info);
 
 	struct timeval start;
 	gettimeofday(&start, 0);
@@ -144,6 +185,8 @@ int main(int argc, char** argv)
 	copy_to_clipboard(url);
 
 	free(url);
+
+	remove_lock_file();
 
 	return 0;
 }

@@ -130,10 +130,11 @@ area_t select_area()
 			p1.x = event.xbutton.x;
 			p1.y = event.xbutton.y;
 		}
-		else if ((event.type == ButtonPress && event.xbutton.button == Button3)
-		      || (event.type == ButtonPress && event.xbutton.button == Button2)
+		else if ((event.type == ButtonPress && event.xbutton.button != Button1)
 		      || (event.type == KeyPress))
 		{
+			ungrab_input();
+			XFreeCursor(display_info.display, cursor);
 			return area_null();
 		}
 	}
@@ -155,10 +156,11 @@ area_t select_area()
 		{
 			up = 1;
 		}
-		else if ((event.type == ButtonPress && event.xbutton.button == Button3)
-		      || (event.type == ButtonPress && event.xbutton.button == Button2)
+		else if ((event.type == ButtonPress && event.xbutton.button != Button1)
 		      || (event.type == KeyPress))
 		{
+			ungrab_input();
+			XFreeCursor(display_info.display, cursor);
 			return area_null();
 		}
 
