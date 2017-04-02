@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <sys/time.h>
 #include <sys/stat.h>
-#include <sys/file.h>
 #include <time.h>
 #include <string.h>
 #include <libnotify/notify.h>
@@ -14,6 +13,7 @@
 #include "select.h"
 #include "capture.h"
 #include "upload.h"
+#include "lock.h"
 
 void notify(char* url, float time)
 {
@@ -105,45 +105,11 @@ void check_path()
 	}
 }
 
-int check_if_only_instance()
-{
-	int fd = open("/tmp/screensht.lock", O_CREAT | O_RDWR);
-
-	if (fd == -1)
-	{
-		printf("couldn't create lock file\n");
-		close(fd);
-		return 0;
-	}
-
-	struct flock file_lock;
-	file_lock.l_type = F_WRLCK;
-	file_lock.l_whence = SEEK_SET;
-	file_lock.l_start = 0;
-	file_lock.l_len = 0;
-	file_lock.l_pid = getpid();
-
-	if (fcntl(fd, F_SETLK, &file_lock) == -1)
-	{
-		close(fd);
-		return 0;
-	}
-
-	close(fd);
-
-	return 1;
-}
-
-void remove_lock_file()
-{
-	remove("/tmp/screensht.lock");
-}
-
 int main(int argc, char** argv)
 {
 	srand((unsigned int)time(0));
 
-	if (!check_if_only_instance())
+	if (lock_init())
 	{
 		printf("screensht is already running\n");
 		return 0;
@@ -165,7 +131,7 @@ int main(int argc, char** argv)
 		printf("area is null\n");
 		display_info_kill(&display_info);
 		free(filename);
-		remove_lock_file();
+		lock_kill();
 		return 0;
 	}
 
@@ -186,7 +152,7 @@ int main(int argc, char** argv)
 
 	free(url);
 
-	remove_lock_file();
+	lock_kill();
 
 	return 0;
 }
