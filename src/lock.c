@@ -8,7 +8,7 @@ char* lock_filename = "/tmp/screensht.lock";
 
 int lock_init()
 {
-	int fd = open("/tmp/screensht.lock", O_CREAT | O_RDWR);
+	int fd = open(lock_filename, O_CREAT | O_RDWR);
 
 	if (fd == -1)
 	{
