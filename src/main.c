@@ -5,6 +5,7 @@
 #include <time.h>
 #include <string.h>
 #include <libnotify/notify.h>
+#include <signal.h>
 
 #include "area.h"
 #include "display_info.h"
@@ -105,9 +106,16 @@ void check_path()
 	}
 }
 
+void sigint_handler(int i)
+{
+	lock_kill();
+	exit(0);
+}
+
 int main(int argc, char** argv)
 {
 	srand((unsigned int)time(0));
+	signal(SIGINT, sigint_handler);
 
 	if (lock_init())
 	{

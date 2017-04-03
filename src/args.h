@@ -1,7 +1,7 @@
 #ifndef ARGS_H
 #define ARGS_H
 
-#include "upload.h"
+#include "hosts.h"
 
 typedef struct
 {

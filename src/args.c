@@ -6,7 +6,8 @@
 #include <limits.h>
 
 #include "display_info.h"
-#include "upload.h"
+#include "hosts.h"
+#include "lock.h"
 
 args_t args;
 
@@ -30,7 +31,7 @@ void args_init(int argc, char** argv)
 		if (!strcmp(argv[i], "-h"))
 		{
 			i++;
-			int hosts_n = sizeof(hosts) / sizeof(*hosts);
+			int hosts_n = n_hosts;
 			if (!strcmp(argv[i], "random"))
 			{
 				args.host = hosts[rand() % hosts_n];
@@ -84,6 +85,7 @@ void args_init(int argc, char** argv)
 					"\t-s\tsecondary color\n"
 			);
 			display_info_kill(&display_info);
+			lock_kill();
 			exit(0);
 		}
 	}
