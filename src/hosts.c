@@ -4,20 +4,85 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "jsmn/jsmn.h"
+#include "args.h"
+
 const host_t const hosts[] = {
-		{ "0x0.st", "file", "https://0x0.st/", &regular_response },
-		{ "mixtape.moe", "files[]", "https://mixtape.moe/upload.php", &get_json_url },
-		{ "nya.is", "files[]", "https://nya.is/upload", &get_json_url },
-		{ "p.fuwafuwa.moe", "files[]", "https://p.fuwafuwa.moe/upload.php", &get_json_url },
-		{ "safe.moe", "files[]", "https://safe.moe/api/upload", &get_json_url },
-		{ "cocaine.ninja", "files[]", "https://cocaine.ninja/upload.php?output=text", &regular_response },
-		{ "comfy.moe", "files[]", "https://comfy.moe/upload.php", &get_json_url },
-		{ "pomf.cat", "files[]", "https://pomf.cat/upload.php", &pomf_cat },
-		{ "lewd.se", "file", "https://lewd.se/api.php?d=upload-tool", &regular_response },
-		{ "memenet.org", "files[]", "https://memenet.org/upload.php", &get_json_url },
-		{ "uguu.se", "file", "https://uguu.se/api.php?d=upload-tool", &regular_response },
-		{ "yiff.moe", "files[]", "https://yiff.moe/upload.php", &get_json_url },
-		{ "vidga.me", "files[]", "https://vidga.me/upload.php", &get_json_url }
+		{
+				.arg_name = "0x0.st",
+				.upload_url = "https://0x0.st/",
+				.form_name = "file"
+		},
+		{
+				.arg_name = "mixtape.moe",
+				.upload_url = "https://mixtape.moe/upload.php",
+				.form_name = "files[]",
+				.json_url_key = "url"
+		},
+		{
+				.arg_name = "nya.is",
+				.upload_url = "https://nya.is/upload",
+				.form_name = "files[]",
+				.json_url_key = "url"
+		},
+		{
+				.arg_name = "p.fuwafuwa.moe",
+				.upload_url = "https://p.fuwafuwa.moe/upload.php",
+				.form_name = "files[]",
+				.json_url_key = "url"
+		},
+		{
+				.arg_name = "safe.moe",
+				.upload_url = "https://safe.moe/api/upload",
+				.form_name = "files[]",
+				.json_url_key = "url"
+		},
+		{
+				.arg_name = "cocaine.ninja",
+				.upload_url = "https://cocaine.ninja/upload.php?output=text",
+				.form_name = "files[]"
+		},
+		{
+				.arg_name = "comfy.moe",
+				.upload_url = "https://comfy.moe/upload.php",
+				.form_name = "files[]",
+				.json_url_key = "url"
+		},
+		{
+				.arg_name = "pomf.cat",
+				.upload_url = "https://pomf.cat/upload.php",
+				.form_name = "files[]",
+				.json_url_key = "url",
+				.prefix = "https://a.pomf.cat/"
+		},
+		{
+				.arg_name = "lewd.se",
+				.upload_url = "https://lewd.se/api.php?d=upload-tool",
+				.form_name = "file"
+		},
+		{
+				.arg_name = "memenet.org",
+				.upload_url = "https://memenet.org/upload.php",
+				.form_name = "files[]",
+				.json_url_key = "url"
+		},
+		{
+				.arg_name = "uguu.se",
+				.upload_url = "https://uguu.se/api.php?d=upload-tool",
+				.form_name = "file"
+		},
+		{
+				.arg_name = "yiff.moe",
+				.upload_url = "https://yiff.moe/upload.php",
+				.form_name = "files[]",
+				.json_url_key = "url"
+		},
+		{
+				.arg_name = "vidga.me",
+				.upload_url = "https://vidga.me/upload.php",
+				.form_name = "files[]",
+				.json_url_key = "url"
+		}
 };
 
 const int n_hosts = sizeof(hosts) / sizeof(hosts[0]);
@@ -54,36 +119,85 @@ void strip_unwanted_chars(char* str)
 	str[j] = 0;
 }
 
-char* regular_response(char* response)
+jsmntok_t* get_tokens(char* json, int* n_tokens)
 {
-	char* result = malloc(sizeof(char) * strlen(response));
-	strcpy(result, response);
-	free(response);
-	strip_unwanted_chars(result);
-	return result;
+	jsmn_parser parser;
+	jsmn_init(&parser);
+
+	int size = 32;
+	jsmntok_t* tokens = malloc(sizeof(jsmntok_t) * size);
+	int code = jsmn_parse(&parser, json, strlen(json), tokens, (unsigned int)size);
+
+	while (code == JSMN_ERROR_NOMEM)
+	{
+		printf("expanding tokens buffer from %d to ", size);
+		size *= 2;
+		printf("%d\n", size);
+		tokens = realloc(tokens, sizeof(jsmntok_t) * size);
+		code = jsmn_parse(&parser, json, strlen(json), tokens, (unsigned int)size);
+	}
+
+	if (code == JSMN_ERROR_INVAL)
+	{
+		printf("invalid json response\n");
+	}
+
+	*n_tokens = size;
+
+	return tokens;
 }
 
-char* get_json_url(char* response)
+char* get_text_by_key(char *json, char* key)
 {
-	char* start = strstr(response, "url\":") + 6;
-	char* end = strstr(start, ".jpg") + 4;
-	*end = 0;
-	int len = (int)(end - start);
-	char* result = malloc(sizeof(char) * len);
-	strcpy(result, start);
-	free(response);
-	strip_unwanted_chars(result);
-	result[len] = 0;
-	return result;
+	int n_tokens = 0;
+	jsmntok_t* tokens = get_tokens(json, &n_tokens);
+
+	printf("%d tokens allocated\n", n_tokens);
+
+	for (int i = 0; i < n_tokens; i++)
+	{
+		jsmntok_t *curr = &tokens[i];
+
+		if (!strncmp(key, &json[curr->start], (size_t)(curr->end - curr->start)))
+		{
+			curr++;
+			return strndup(&json[curr->start], (size_t)(curr->end - curr->start));
+		}
+	}
+
+	printf("couldn't find \"%s\" in json response\n", key);
+
+	return 0;
 }
 
-char* pomf_cat(char* response)
+char* parse_response(char* response)
 {
-	char* append = get_json_url(response);
-	const char* base = "https://a.pomf.cat/";
-	int len = (int)(strlen(base) + strlen(append));
-	char* result = malloc((size_t)len + 1);
-	memcpy(result, base, strlen(base));
-	memcpy(result + strlen(base), append, strlen(append) + 1);
+	char* result = malloc(strlen(response));
+	char* url_key = args.host.json_url_key;
+
+	if (url_key == 0)
+	{
+		strcpy(result, response);
+	}
+	else
+	{
+		char* url_text = get_text_by_key(response, url_key);
+		strcpy(result, url_text);
+		free(url_text);
+	}
+
+	char* prefix = args.host.prefix;
+
+	if (prefix != 0)
+	{
+		char* temp = strdup(result);
+		result = realloc(result, strlen(prefix) + strlen(result));
+		strcpy(result, prefix);
+		strcat(result, temp);
+		free(temp);
+	}
+
+	free(response);
+	strip_unwanted_chars(result);
 	return result;
 }

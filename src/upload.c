@@ -123,5 +123,5 @@ char* upload_sht(char* filename)
 
 	printf("%s\n", buffer.data);
 
-	return args.host.convert_url(buffer.data);
+	return parse_response(buffer.data);
 }

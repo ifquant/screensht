@@ -21,7 +21,7 @@ include_directories(${GDK_PIXBUF_INCLUDE_DIRS})
 pkg_check_modules(LIBNOTIFY libnotify REQUIRED)
 include_directories(${LIBNOTIFY_INCLUDE_DIRS})
 
-file(GLOB_RECURSE SOURCES src/*.c)
+file(GLOB SOURCES src/*.c src/jsmn/*.c)
 add_executable(screensht ${SOURCES})
 target_link_libraries(
         screensht
