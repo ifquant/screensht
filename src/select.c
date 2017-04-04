@@ -81,9 +81,9 @@ void draw_selection(area_t area)
 	free(text);
 }
 
-void grab_input(Cursor cursor)
+int grab_input(Cursor cursor)
 {
-	XGrabPointer(
+	int status_pointer = XGrabPointer(
 			display_info.display,
 			display_info.root,
 			0,
@@ -95,7 +95,7 @@ void grab_input(Cursor cursor)
 			CurrentTime
 	);
 
-	XGrabKeyboard(
+	int keyboard_pointer = XGrabKeyboard(
 			display_info.display,
 			display_info.root,
 			0,
@@ -103,6 +103,13 @@ void grab_input(Cursor cursor)
 			GrabModeAsync,
 			CurrentTime
 	);
+
+	if (status_pointer == AlreadyGrabbed)
+	{
+		return 1;
+	}
+
+	return 0;
 }
 
 void ungrab_input()
@@ -114,7 +121,13 @@ void ungrab_input()
 area_t select_area()
 {
 	Cursor cursor = XCreateFontCursor(display_info.display, XC_tcross);
-	grab_input(cursor);
+
+	if (grab_input(cursor))
+	{
+		printf("cursor is already grabbed\n");
+		XFreeCursor(display_info.display, cursor);
+		return area_null();
+	}
 
 	vec2_t p1 = { 0, 0 };
 	int pressed = 0;
@@ -168,6 +181,7 @@ area_t select_area()
 
 	ungrab_input();
 	XFreeCursor(display_info.display, cursor);
+	XClearWindow(display_info.display, window_info.window);
 
 	return area_positions_to_area(p1, p2);
 }

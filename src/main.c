@@ -14,7 +14,6 @@
 #include "select.h"
 #include "capture.h"
 #include "upload.h"
-#include "lock.h"
 
 void notify(char* url, float time)
 {
@@ -108,7 +107,8 @@ void check_path()
 
 void sigint_handler(int i)
 {
-	lock_kill();
+	window_info_kill(&window_info);
+	display_info_kill(&display_info);
 	exit(0);
 }
 
@@ -117,50 +117,35 @@ int main(int argc, char** argv)
 	srand((unsigned int)time(0));
 	signal(SIGINT, sigint_handler);
 
-	if (lock_init())
-	{
-		printf("screensht is already running\n");
-		return 0;
-	}
-
 	display_info_init();
 	args_init(argc, argv);
 	window_info_init();
 
 	check_path();
-
 	char* filename = get_filename();
 	area_t area = select_area();
-
-	window_info_kill(&window_info);
 
 	if (area_is_null(area))
 	{
 		printf("area is null\n");
+		window_info_kill(&window_info);
 		display_info_kill(&display_info);
 		free(filename);
-		lock_kill();
 		return 0;
 	}
 
 	struct timeval start;
 	gettimeofday(&start, 0);
-
 	capture_sht(area, filename);
-
-	display_info_kill(&display_info);
-
 	char* url = upload_sht(filename);
-
-	free(filename);
-
 	float elapsed = get_elapsed(start);
 	notify(url, elapsed);
 	copy_to_clipboard(url);
 
+	window_info_kill(&window_info);
+	display_info_kill(&display_info);
 	free(url);
-
-	lock_kill();
+	free(filename);
 
 	return 0;
 }

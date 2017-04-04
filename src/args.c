@@ -7,7 +7,6 @@
 
 #include "display_info.h"
 #include "hosts.h"
-#include "lock.h"
 
 args_t args;
 
@@ -85,7 +84,6 @@ void args_init(int argc, char** argv)
 					"\t-s\tsecondary color\n"
 			);
 			display_info_kill(&display_info);
-			lock_kill();
 			exit(0);
 		}
 	}
