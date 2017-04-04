@@ -19,6 +19,11 @@ A simple and quick selection screenshot uploader for Linux written in C using Xl
 * [uguu.se](https://uguu.se)
 * [yiff.moe](https://yiff.moe)
 * [vidga.me](https://vidga.me)
+* [aww.moe](https://aww.moe)
+* [pomf.space](https://pomf.space)
+* [reich.io](https://reich.io)
+* [sugoi.vidyagam.es](https://sugoi.vidyagam.es)
+* [up.che.moe](http://sugoi.vidyagam.es)
 
 ## Options
 

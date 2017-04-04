@@ -82,6 +82,36 @@ const host_t const hosts[] = {
 				.upload_url = "https://vidga.me/upload.php",
 				.form_name = "files[]",
 				.json_url_key = "url"
+		},
+		{
+				.arg_name = "aww.moe",
+				.upload_url = "https://u.aww.moe/upload",
+				.form_name = "files[]",
+				.json_url_key = "fullurl"
+		},
+		{
+				.arg_name = "pomf.space",
+				.upload_url = "https://pomf.space/upload.php",
+				.form_name = "files[]",
+				.json_url_key = "url"
+		},
+		{
+				.arg_name = "reich.io",
+				.upload_url = "https://reich.io/upload.php",
+				.form_name = "files[]",
+				.json_url_key = "url"
+		},
+		{
+				.arg_name = "sugoi.vidyagam.es",
+				.upload_url = "https://sugoi.vidyagam.es/upload.php",
+				.form_name = "files[]",
+				.json_url_key = "url"
+		},
+		{
+				.arg_name = "up.che.moe",
+				.upload_url = "http://up.che.moe/upload.php",
+				.form_name = "files[]",
+				.json_url_key = "url"
 		}
 };
 
