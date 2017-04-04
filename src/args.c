@@ -10,6 +10,13 @@
 
 args_t args;
 
+void end(const char* str)
+{
+	printf("%s", str);
+	display_info_kill(&display_info);
+	exit(0);
+}
+
 void args_init(int argc, char** argv)
 {
 	// defaults
@@ -30,19 +37,22 @@ void args_init(int argc, char** argv)
 		if (!strcmp(argv[i], "-h"))
 		{
 			i++;
-			int hosts_n = n_hosts;
 			if (!strcmp(argv[i], "random"))
 			{
-				args.host = hosts[rand() % hosts_n];
+				args.host = hosts[rand() % n_hosts];
 			}
 			else
 			{
-				for (int j = 0; j < hosts_n; j++)
+				for (int j = 0; j < n_hosts; j++)
 				{
 					if (!strcmp(argv[i], hosts[j].arg_name))
 					{
 						args.host = hosts[j];
 						break;
+					}
+					else if (j == n_hosts - 1)
+					{
+						end("invalid host\n");
 					}
 				}
 			}
@@ -51,6 +61,11 @@ void args_init(int argc, char** argv)
 		{
 			i++;
 			args.quality = atoi(argv[i]);
+
+			if (args.quality > 100 || args.quality < 0)
+			{
+				end("invalid quality\n");
+			}
 		}
 		else if (!strcmp(argv[i], "-d"))
 		{
@@ -66,25 +81,33 @@ void args_init(int argc, char** argv)
 		{
 			i++;
 			args.color = (unsigned long)strtol(argv[i], 0, 16);
+
+			if (args.color > 0xffffffff || args.color < 0x0)
+			{
+				end("invalid color\n");
+			}
 		}
 		else if (!strcmp(argv[i], "-s"))
 		{
 			i++;
 			args.color_secondary = (unsigned long)strtol(argv[i], 0, 16);
+
+			if (args.color_secondary > 0xffffffff || args.color_secondary < 0x0)
+			{
+				end("invalid secondary color\n");
+			}
 		}
 		else
 		{
-			printf(
+			end(
 					"options:\n"
-					"\t-h\thost\n"
-					"\t-q\tquality, 0-100\n"
-					"\t-d\tdirectory\n"
-					"\t-f\tfont name\n"
-					"\t-c\tcolor in ARGB hex code\n"
-					"\t-s\tsecondary color\n"
+							"\t-h\thost\n"
+							"\t-q\tquality, 0-100\n"
+							"\t-d\tdirectory\n"
+							"\t-f\tfont name\n"
+							"\t-c\tcolor in ARGB hex code\n"
+							"\t-s\tsecondary color\n"
 			);
-			display_info_kill(&display_info);
-			exit(0);
 		}
 	}
 
