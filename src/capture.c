@@ -56,7 +56,7 @@ void capture_sht(area_t area, char* filename)
 
 	while (cinfo.next_scanline < cinfo.image_height)
 	{
-		JSAMPROW row_pointer = &buffer[cinfo.next_scanline * img->width * (img->depth >> 3)];
+		JSAMPROW row_pointer = (JSAMPROW)&buffer[cinfo.next_scanline * img->width * (img->depth >> 3)];
 		jpeg_write_scanlines(&cinfo, &row_pointer, 1);
 	}
 

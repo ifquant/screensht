@@ -3,6 +3,8 @@ find_package(PkgConfig REQUIRED)
 cmake_minimum_required(VERSION 2.8)
 project(screensht C)
 
+set(CMAKE_C_FLAGS "-Wall -std=gnu11 -pedantic")
+
 pkg_check_modules(X11 x11 REQUIRED)
 include_directories(${X11_INCLUDE_DIRS})
 

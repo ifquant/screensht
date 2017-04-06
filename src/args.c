@@ -82,7 +82,7 @@ void args_init(int argc, char** argv)
 			i++;
 			args.color = (unsigned long)strtol(argv[i], 0, 16);
 
-			if (args.color > 0xffffffff || args.color < 0x0)
+			if (args.color > 0xffffffff)
 			{
 				end("invalid color\n");
 			}
@@ -92,7 +92,7 @@ void args_init(int argc, char** argv)
 			i++;
 			args.color_secondary = (unsigned long)strtol(argv[i], 0, 16);
 
-			if (args.color_secondary > 0xffffffff || args.color_secondary < 0x0)
+			if (args.color_secondary > 0xffffffff)
 			{
 				end("invalid secondary color\n");
 			}

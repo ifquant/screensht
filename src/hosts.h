@@ -12,7 +12,7 @@ typedef struct
 
 char* parse_response(char* response);
 
-const extern host_t const hosts[];
+const extern host_t hosts[];
 const extern int n_hosts;
 
 #endif

@@ -98,7 +98,7 @@ char* upload_sht(char* filename)
 		FD_ZERO(&err);
 
 		int max_fd = -1;
-		CURLMcode multi_code = curl_multi_fdset(multi, &read, &write, &err, &max_fd);
+		curl_multi_fdset(multi, &read, &write, &err, &max_fd);
 		int select_code;
 
 		if (max_fd == -1)

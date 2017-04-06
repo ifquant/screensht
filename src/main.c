@@ -5,7 +5,6 @@
 #include <time.h>
 #include <string.h>
 #include <libnotify/notify.h>
-#include <signal.h>
 
 #include "area.h"
 #include "display_info.h"

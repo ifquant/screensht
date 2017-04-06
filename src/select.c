@@ -95,7 +95,7 @@ int grab_input(Cursor cursor)
 			CurrentTime
 	);
 
-	int keyboard_pointer = XGrabKeyboard(
+	XGrabKeyboard(
 			display_info.display,
 			display_info.root,
 			0,

@@ -7,7 +7,7 @@
 #include "jsmn/jsmn.h"
 #include "args.h"
 
-const host_t const hosts[] = {
+const host_t hosts[] = {
 		{
 				.arg_name = "0x0.st",
 				.upload_url = "https://0x0.st/",
