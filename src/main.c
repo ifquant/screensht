@@ -124,10 +124,11 @@ int main(int argc, char** argv)
 	char* filename = get_filename();
 	area_t area = select_area();
 
+	window_info_kill(&window_info);
+
 	if (area_is_null(area))
 	{
 		printf("area is null\n");
-		window_info_kill(&window_info);
 		display_info_kill(&display_info);
 		free(filename);
 		return 0;
@@ -141,7 +142,6 @@ int main(int argc, char** argv)
 	notify(url, elapsed);
 	copy_to_clipboard(url);
 
-	window_info_kill(&window_info);
 	display_info_kill(&display_info);
 	free(url);
 	free(filename);
