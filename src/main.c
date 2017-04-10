@@ -118,13 +118,10 @@ int main(int argc, char** argv)
 
 	display_info_init();
 	args_init(argc, argv);
-	window_info_init();
 
 	check_path();
 	char* filename = get_filename();
 	area_t area = select_area();
-
-	window_info_kill(&window_info);
 
 	if (area_is_null(area))
 	{

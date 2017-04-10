@@ -8,6 +8,7 @@ typedef struct
 	Display* display;
 	Window root;
 	Screen* screen;
+	int has_composite_manager;
 } display_info_t;
 
 void display_info_init();
