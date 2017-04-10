@@ -22,7 +22,7 @@ void display_info_init()
 				"running screensht in compatibility mode (no composite manager).\n"
 				"some features such as colors are disabled.\n"
 				"for more info have a look at:\n"
-				"https://github.com/nvllvs/screensht#usage\n"
+				"https://github.com/nvllvs/screensht#compatibility-mode\n"
 		);
 	}
 }

@@ -79,6 +79,10 @@ A simple and quick selection screenshot uploader for Linux written in C using Xl
 		screensht -s ffffffff
 		screensht -s 0xffffffff
 
+## Compatibility Mode
+
+If you don't have a composite manager installed, you won't be able to use some features such as colors and the selection might glitch out once in a while. To combat that, install one of [these](https://wiki.archlinux.org/index.php/Xorg#Composite).
+
 ## Usage
 
 Clone with `git clone --recursive https://github.com/nvllvs/screensht`.
@@ -86,8 +90,6 @@ Clone with `git clone --recursive https://github.com/nvllvs/screensht`.
 Run `./install-deps.sh` if you use apt-get (Debian-based distros) or pacman (Arch-based distros). Else find the packages yourself.
 
 Compile with `cmake .; make`.
-
-Run `./screensht`. If you get a black screen install a composite manager such as [Compton](https://wiki.archlinux.org/index.php/Compton).
 
 Bind a key to start the program using [XFCE application shortcuts](https://wiki.manjaro.org/index.php?title=XFCE:Making_Keyboard_Shortcuts_for_Frequently_Used_Applications), [Xbindkeys](https://wiki.archlinux.org/index.php/Xbindkeys) or [Gnome keyboard shortcuts](https://help.gnome.org/users/gnome-help/stable/keyboard-shortcuts-set.html.en).
 
