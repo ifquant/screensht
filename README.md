@@ -79,6 +79,12 @@ A simple and quick selection screenshot uploader for Linux written in C using Xl
 		screensht -s ffffffff
 		screensht -s 0xffffffff
 
+* ### --dont-save
+
+	Don't keep the image locally.
+
+		screensht --dont-save
+
 ## Compatibility Mode
 
 If you don't have a composite manager installed, you won't be able to use some features such as colors and the selection might glitch out once in a while. To combat that, install one of [these](https://wiki.archlinux.org/index.php/Xorg#Composite).

@@ -139,6 +139,11 @@ int main(int argc, char** argv)
 	notify(url, elapsed);
 	copy_to_clipboard(url);
 
+	if (args.dont_save)
+	{
+		remove(filename);
+	}
+
 	display_info_kill(&display_info);
 	free(url);
 	free(filename);

@@ -26,6 +26,7 @@ void args_init(int argc, char** argv)
 	args.fontname = "*x14";
 	args.color = 0xfff0f0f0; // ARGB
 	args.color_secondary = 0xff000000;
+	args.dont_save = 0;
 
 	if (argc <= 1)
 	{
@@ -96,6 +97,10 @@ void args_init(int argc, char** argv)
 			{
 				end("invalid secondary color\n");
 			}
+		}
+		else if (!strcmp(argv[i], "--dont-save"))
+		{
+			args.dont_save = 1;
 		}
 		else
 		{
