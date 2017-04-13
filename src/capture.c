@@ -63,7 +63,7 @@ unsigned char* capture_sht(area_t area, unsigned long* size)
 	cinfo.in_color_space = JCS_RGB;
 
 	jpeg_set_defaults(&cinfo);
-	jpeg_set_quality(&cinfo, args.quality, 1);
+	jpeg_set_quality(&cinfo, arg_values.quality, 1);
 	jpeg_start_compress(&cinfo, 1);
 
 	while (cinfo.next_scanline < cinfo.image_height)

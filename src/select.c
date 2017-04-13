@@ -126,7 +126,7 @@ void draw_selection_no_cm(area_t area)
 {
 	char* text = get_size_string(area);
 	GC gc = invert_gc();
-	XFontStruct* font = XLoadQueryFont(display_info.display, args.fontname);
+	XFontStruct* font = XLoadQueryFont(display_info.display, arg_values.font);
 
 	if (!font)
 	{

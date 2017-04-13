@@ -205,7 +205,7 @@ char* parse_response(char* response)
 	printf("raw:\n%s\n", response);
 
 	char* result = malloc(strlen(response));
-	char* url_key = args.host.json_url_key;
+	char* url_key = arg_values.host.json_url_key;
 
 	if (!url_key)
 	{
@@ -218,7 +218,7 @@ char* parse_response(char* response)
 		free(url_text);
 	}
 
-	char* prefix = args.host.prefix;
+	char* prefix = arg_values.host.prefix;
 
 	if (prefix)
 	{

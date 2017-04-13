@@ -27,7 +27,7 @@ A simple and quick selection screenshot uploader for Linux written in C using Xl
 
 ## Options
 
-* ### -h
+* ### -h, --host
 
 	Host, "random" for randomly chosen host.
 
@@ -36,7 +36,7 @@ A simple and quick selection screenshot uploader for Linux written in C using Xl
 		screensht -h safe.moe
 		screensht -h random
 
-* ### -q
+* ### -q, --quality
 
 	Quality, 0-100.
 
@@ -44,7 +44,7 @@ A simple and quick selection screenshot uploader for Linux written in C using Xl
 
 		screensht -q 100
 
-* ### -f
+* ### -f, --font
 
 	Font, "random" for randomly chosen font.
 
@@ -53,7 +53,7 @@ A simple and quick selection screenshot uploader for Linux written in C using Xl
 		screensht -f *x24
 		screensht -f random
 
-* ### -c
+* ### -c, --color
 
 	Main color in ARGB hex format.
 
@@ -62,7 +62,7 @@ A simple and quick selection screenshot uploader for Linux written in C using Xl
 		screensht -c ffaa00ff
 		screensht -c 0xffaa00ff
 
-* ### -s
+* ### -s, --secondary-color
 
 	Secondary color.
 
@@ -70,6 +70,15 @@ A simple and quick selection screenshot uploader for Linux written in C using Xl
 
 		screensht -s ffffffff
 		screensht -s 0xffffffff
+
+* ### -k, --keep
+
+	Where to save the file. If not specified, the image won't be saved.
+
+	###### Default: `None`
+
+		screensht -k ./
+		screensht -k ~/screenshots
 
 ## Compatibility Mode
 

@@ -39,7 +39,7 @@ char* upload_sht(unsigned char* file_buffer, unsigned long size)
 			&post,
 			&lastptr,
 			CURLFORM_COPYNAME,
-			args.host.form_name,
+			arg_values.host.form_name,
 			CURLFORM_BUFFER,
 			"screensht.jpg",
 			CURLFORM_BUFFERPTR,
@@ -61,7 +61,7 @@ char* upload_sht(unsigned char* file_buffer, unsigned long size)
 		return buffer.data;
 	}
 
-	curl_easy_setopt(curl, CURLOPT_URL, args.host.upload_url);
+	curl_easy_setopt(curl, CURLOPT_URL, arg_values.host.upload_url);
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, memory_callback);
 	curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*)&buffer);
 	curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);

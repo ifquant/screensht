@@ -24,8 +24,8 @@ void window_info_init()
 			XRootWindow(display_info.display, 0),
 			0,
 			0,
-			window_info.size.x,
-			window_info.size.y,
+			(unsigned int)window_info.size.x,
+			(unsigned int)window_info.size.y,
 			0,
 			vinfo.depth,
 			InputOutput,
@@ -37,7 +37,7 @@ void window_info_init()
 	XMapWindow(display_info.display, window_info.window);
 
 	XGCValues gcv;
-	gcv.foreground = args.color;
+	gcv.foreground = arg_values.color;
 	gcv.function = GXcopy;
 	gcv.subwindow_mode = IncludeInferiors;
 
@@ -49,7 +49,7 @@ void window_info_init()
 	);
 
 	XGCValues gcv_secondary;
-	gcv_secondary.foreground = args.color_secondary;
+	gcv_secondary.foreground = arg_values.secondary_color;
 	gcv_secondary.function = GXcopy;
 	gcv_secondary.subwindow_mode = IncludeInferiors;
 
@@ -60,7 +60,7 @@ void window_info_init()
 			&gcv_secondary
 	);
 
-	window_info.font = XLoadQueryFont(display_info.display, args.fontname);
+	window_info.font = XLoadQueryFont(display_info.display, arg_values.font);
 
 	if (!window_info.font)
 	{

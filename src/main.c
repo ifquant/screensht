@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
-#include <sys/stat.h>
 #include <time.h>
 #include <string.h>
 #include <libnotify/notify.h>
@@ -14,6 +13,7 @@
 #include "select.h"
 #include "capture.h"
 #include "upload.h"
+#include "save.h"
 
 void notify(char* url, float time)
 {
@@ -35,43 +35,6 @@ void copy_to_clipboard(char* text)
 	system(buffer);
 }
 
-char* rand_string(int n)
-{
-	char chars[] = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm";
-	char* result = malloc(sizeof(char) * (n - 1));
-
-	for (int i = 0; i < n; i++)
-	{
-		result[i] = chars[rand() % (sizeof(chars) - 1)];
-	}
-
-	result[n] = 0;
-
-	return result;
-}
-
-char* get_filename()
-{
-	time_t t = time(0);
-	struct tm tm = *localtime(&t);
-	char buffer[128];
-	char* rand = rand_string(4);
-	sprintf(
-			buffer,
-			"%sscreensht_%04d-%02d-%02d_%02d.%02d.%02d_%s.jpg",
-			"./",
-			1900 + tm.tm_year,
-			1 + tm.tm_mon,
-			tm.tm_mday,
-			tm.tm_hour,
-			tm.tm_min,
-			tm.tm_sec,
-			rand
-	);
-	free(rand);
-	return strdup(buffer);
-}
-
 float get_elapsed(struct timeval start)
 {
 	struct timeval end;
@@ -79,32 +42,6 @@ float get_elapsed(struct timeval start)
 	float elapsed = (end.tv_sec - start.tv_sec) * 1000.f + (end.tv_usec - start.tv_usec) / 1000.f;
 	return elapsed;
 }
-
-void mkpath(char* path)
-{
-	for (char* p = strchr(path + 1, '/'); p; p = strchr(p + 1, '/'))
-	{
-		*p = '\0';
-		mkdir(path, 0755);
-		*p = '/';
-	}
-}
-
-/*
-void check_path()
-{
-	struct stat st;
-	if (stat(args.directory, &st) == -1)
-	{
-		printf("creating directory path %s\n", args.directory);
-		mkpath(args.directory);
-	}
-	else
-	{
-		printf("directory path %s found\n", args.directory);
-	}
-}
-*/
 
 void sigint_handler(int i)
 {
@@ -136,7 +73,6 @@ int main(int argc, char** argv)
 	unsigned long size = 0;
 	unsigned char* buffer = capture_sht(area, &size);
 	char* url = upload_sht(buffer, size);
-	free(buffer);
 
 	float elapsed = get_elapsed(start);
 	notify(url, elapsed);
@@ -144,6 +80,13 @@ int main(int argc, char** argv)
 
 	display_info_kill(&display_info);
 	free(url);
+
+	if (strcmp(arg_values.keep, ""))
+	{
+		save(buffer, size);
+	}
+
+	free(buffer);
 
 	return 0;
 }

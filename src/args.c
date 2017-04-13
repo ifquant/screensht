@@ -8,23 +8,80 @@
 #include "display_info.h"
 #include "hosts.h"
 
-args_t args;
+arg_values_t arg_values;
+arg_t args[] = {
+		{ "-h", "--host", .ptr = &arg_values.host, .type = TYPE_HOST_T },
+		{ "-q", "--quality", .ptr = &arg_values.quality, .type = TYPE_INT },
+		{ "-f", "--font", .ptr = &arg_values.font, .type = TYPE_CHARPTR },
+		{ "-c", "--color", .ptr = &arg_values.color, .type = TYPE_ULONG },
+		{ "-s", "--secondary-color", .ptr = &arg_values.secondary_color, .type = TYPE_ULONG },
+		{ "-k", "--keep", .ptr = &arg_values.keep, .type = TYPE_CHARPTR }
+};
+int n_args = sizeof(args) / sizeof(args[0]);
 
-void end(const char* str)
+void end()
 {
-	printf("%s", str);
 	display_info_kill(&display_info);
 	exit(0);
+}
+
+void help()
+{
+	printf("options:\n");
+
+	for (int i = 0; i < n_args; i++)
+	{
+		printf("\t%s\t%s\n", args[i].short_name, args[i].name);
+	}
+
+	printf("\nhttps://github.com/nvllvs/screensht#options\n");
+	end();
+}
+
+host_t find_host(char* name)
+{
+	for (int i = 0; i < n_hosts; i++)
+	{
+		if (!strcmp(hosts[i].arg_name, name))
+		{
+			return hosts[i];
+		}
+	}
+
+	printf("invalid host name\n");
+	end();
+	return hosts[0];
+}
+
+void change_arg_value(arg_t arg, char* new_value)
+{
+	if (arg.type == TYPE_CHARPTR)
+	{
+		*(char**)arg.ptr = new_value;
+	}
+	else if (arg.type == TYPE_HOST_T)
+	{
+		*(host_t*)arg.ptr = find_host(new_value);
+	}
+	else if (arg.type == TYPE_INT)
+	{
+		*(int*)arg.ptr = atoi(new_value);
+	}
+	else if (arg.type == TYPE_ULONG)
+	{
+		*(unsigned long*)arg.ptr = (unsigned long)strtol(new_value, 0, 16);
+	}
 }
 
 void args_init(int argc, char** argv)
 {
 	// defaults
-	args.host = hosts[0];
-	args.quality = 99;
-	args.fontname = "*x14";
-	args.color = 0xfff0f0f0; // ARGB
-	args.color_secondary = 0xff000000;
+	arg_values.host = hosts[0];
+	arg_values.quality = 99;
+	arg_values.font = "*x14";
+	arg_values.color = 0xfff0f0f0; // ARGB
+	arg_values.secondary_color = 0xff000000;
+	arg_values.keep = "";
 
 	if (argc <= 1)
 	{
@@ -33,81 +90,35 @@ void args_init(int argc, char** argv)
 
 	for (int i = 1; i < argc; i++)
 	{
-		if (!strcmp(argv[i], "-h"))
+		for (int j = 0; j < n_args; j++)
 		{
-			i++;
-			if (!strcmp(argv[i], "random"))
+			if (strcmp(argv[i], args[j].short_name) && strcmp(argv[i], args[j].name))
 			{
-				args.host = hosts[rand() % n_hosts];
-			}
-			else
-			{
-				for (int j = 0; j < n_hosts; j++)
+				if (j + 1 == n_args)
 				{
-					if (!strcmp(argv[i], hosts[j].arg_name))
-					{
-						args.host = hosts[j];
-						break;
-					}
-					else if (j == n_hosts - 1)
-					{
-						end("invalid host\n");
-					}
+					help();
 				}
-			}
-		}
-		else if (!strcmp(argv[i], "-q"))
-		{
-			i++;
-			args.quality = atoi(argv[i]);
 
-			if (args.quality > 100 || args.quality < 0)
-			{
-				end("invalid quality\n");
+				continue;
 			}
-		}
-		else if (!strcmp(argv[i], "-f"))
-		{
-			i++;
-			args.fontname = argv[i];
-		}
-		else if (!strcmp(argv[i], "-c"))
-		{
-			i++;
-			args.color = (unsigned long)strtol(argv[i], 0, 16);
 
-			if (args.color > 0xffffffff)
-			{
-				end("invalid color\n");
-			}
-		}
-		else if (!strcmp(argv[i], "-s"))
-		{
 			i++;
-			args.color_secondary = (unsigned long)strtol(argv[i], 0, 16);
 
-			if (args.color_secondary > 0xffffffff)
-			{
-				end("invalid secondary color\n");
-			}
-		}
-		else
-		{
-			end(
-					"options:\n"
-							"\t-h\thost\n"
-							"\t-q\tquality, 0-100\n"
-							"\t-f\tfont name\n"
-							"\t-c\tcolor in ARGB hex code\n"
-							"\t-s\tsecondary color\n"
-			);
+			change_arg_value(args[j], argv[i]);
+
+			break;
 		}
 	}
 
-	if (!strcmp(args.fontname, "random"))
+	if (arg_values.keep[strlen(arg_values.keep) - 1] != '/')
+	{
+		strcat(arg_values.keep, "/");
+	}
+
+	if (!strcmp(arg_values.font, "random"))
 	{
 		int fonts_n;
 		char** fonts = XListFonts(display_info.display, "*", INT_MAX, &fonts_n);
-		args.fontname = fonts[rand() % fonts_n];
+		arg_values.font = fonts[rand() % fonts_n];
 	}
 }
