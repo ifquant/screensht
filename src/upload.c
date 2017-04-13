@@ -123,6 +123,7 @@ char* upload_sht(unsigned char* file_buffer, unsigned long size)
 
 	curl_multi_cleanup(multi);
 	curl_easy_cleanup(curl);
+	curl_global_cleanup();
 	curl_formfree(post);
 
 	char* tmp = strdup(buffer.data);
