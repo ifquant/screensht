@@ -26,7 +26,7 @@ static size_t memory_callback(void* content, size_t size, size_t nmemb, void* us
 	return real_size;
 }
 
-char* upload_sht(char* filename)
+char* upload_sht(unsigned char* file_buffer, unsigned long size)
 {
 	struct curl_httppost* post = 0;
 	struct curl_httppost* lastptr = 0;
@@ -40,8 +40,12 @@ char* upload_sht(char* filename)
 			&lastptr,
 			CURLFORM_COPYNAME,
 			args.host.form_name,
-			CURLFORM_FILE,
-			filename,
+			CURLFORM_BUFFER,
+			"screensht.jpg",
+			CURLFORM_BUFFERPTR,
+			file_buffer,
+			CURLFORM_BUFFERLENGTH,
+			(long)size,
 			CURLFORM_END
 	);
 
@@ -121,7 +125,8 @@ char* upload_sht(char* filename)
 	curl_easy_cleanup(curl);
 	curl_formfree(post);
 
-	printf("%s\n", buffer.data);
+	char* tmp = strdup(buffer.data);
+	free(buffer.data);
 
-	return parse_response(buffer.data);
+	return parse_response(tmp);
 }

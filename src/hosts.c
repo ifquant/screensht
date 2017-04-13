@@ -202,10 +202,12 @@ char* get_text_by_key(char *json, char* key)
 
 char* parse_response(char* response)
 {
+	printf("raw:\n%s\n", response);
+
 	char* result = malloc(strlen(response));
 	char* url_key = args.host.json_url_key;
 
-	if (url_key == 0)
+	if (!url_key)
 	{
 		strcpy(result, response);
 	}
@@ -218,7 +220,7 @@ char* parse_response(char* response)
 
 	char* prefix = args.host.prefix;
 
-	if (prefix != 0)
+	if (prefix)
 	{
 		char* temp = strdup(result);
 		result = realloc(result, strlen(prefix) + strlen(result));
@@ -229,5 +231,8 @@ char* parse_response(char* response)
 
 	free(response);
 	strip_unwanted_chars(result);
+
+	printf("parsed:\n%s\n", result);
+
 	return result;
 }

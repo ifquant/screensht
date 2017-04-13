@@ -3,6 +3,6 @@
 
 #include "area.h"
 
-void capture_sht(area_t area, char* filename);
+unsigned char* capture_sht(area_t area, unsigned long* size);
 
 #endif

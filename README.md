@@ -44,14 +44,6 @@ A simple and quick selection screenshot uploader for Linux written in C using Xl
 
 		screensht -q 100
 
-* ### -d
-
-	Directory to save in. If the specified path doesn't exist, it's created.
-	
-	###### Default: `./`
-
-		screensht -d /home/me/screenshots/
-
 * ### -f
 
 	Font, "random" for randomly chosen font.
@@ -78,12 +70,6 @@ A simple and quick selection screenshot uploader for Linux written in C using Xl
 
 		screensht -s ffffffff
 		screensht -s 0xffffffff
-
-* ### --dont-save
-
-	Don't keep the image locally.
-
-		screensht --dont-save
 
 ## Compatibility Mode
 

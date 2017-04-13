@@ -8,28 +8,31 @@
 #include "display_info.h"
 #include "args.h"
 
-void capture_sht(area_t area, char* filename)
+XImage* get_selection_ximage(area_t area)
 {
-	XImage* img = XGetImage(
+	return XGetImage(
 			display_info.display,
 			display_info.root,
 			area.x,
 			area.y,
-			area.w,
-			area.h,
+			(unsigned int)area.w,
+			(unsigned int)area.h,
 			AllPlanes,
 			ZPixmap
 	);
+}
 
-	FILE* out = fopen(filename, "wb");
-	char* buffer = malloc(sizeof(char) * 3 * img->width * img->height);
+char* ximage_to_buffer(XImage* img)
+{
+	unsigned long img_size = sizeof(char) * 3 * img->width * img->height;
+	char* buffer = malloc(img_size);
 
 	for (int y = 0; y < img->height; y++)
 	{
 		for (int x = 0; x < img->width; x++)
 		{
 			unsigned long px = XGetPixel(img, x, y);
-			unsigned int p = (y * img->width + x) * 3;
+			unsigned int p = (unsigned int)(y * img->width + x) * 3;
 
 			buffer[p++] = (char)(px >> 16);
 			buffer[p++] = (char)((px & 0xff00) >> 8);
@@ -37,16 +40,25 @@ void capture_sht(area_t area, char* filename)
 		}
 	}
 
+	return buffer;
+}
+
+unsigned char* capture_sht(area_t area, unsigned long* size)
+{
+	unsigned char* result = NULL;
+	XImage* img = get_selection_ximage(area);
+	char* buffer = ximage_to_buffer(img);
+
 	struct jpeg_compress_struct cinfo;
 	struct jpeg_error_mgr err;
 
 	cinfo.err = jpeg_std_error(&err);
 
 	jpeg_create_compress(&cinfo);
-	jpeg_stdio_dest(&cinfo, out);
+	jpeg_mem_dest(&cinfo, &result, size);
 
-	cinfo.image_width = img->width;
-	cinfo.image_height = img->height;
+	cinfo.image_width = (JDIMENSION)img->width;
+	cinfo.image_height = (JDIMENSION)img->height;
 	cinfo.input_components = 3;
 	cinfo.in_color_space = JCS_RGB;
 
@@ -63,7 +75,8 @@ void capture_sht(area_t area, char* filename)
 	free(buffer);
 	jpeg_finish_compress(&cinfo);
 	jpeg_destroy_compress(&cinfo);
-	fclose(out);
 
 	XDestroyImage(img);
+
+	return result;
 }

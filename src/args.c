@@ -22,11 +22,9 @@ void args_init(int argc, char** argv)
 	// defaults
 	args.host = hosts[0];
 	args.quality = 99;
-	args.directory = "./";
 	args.fontname = "*x14";
 	args.color = 0xfff0f0f0; // ARGB
 	args.color_secondary = 0xff000000;
-	args.dont_save = 0;
 
 	if (argc <= 1)
 	{
@@ -68,11 +66,6 @@ void args_init(int argc, char** argv)
 				end("invalid quality\n");
 			}
 		}
-		else if (!strcmp(argv[i], "-d"))
-		{
-			i++;
-			args.directory = argv[i];
-		}
 		else if (!strcmp(argv[i], "-f"))
 		{
 			i++;
@@ -98,28 +91,17 @@ void args_init(int argc, char** argv)
 				end("invalid secondary color\n");
 			}
 		}
-		else if (!strcmp(argv[i], "--dont-save"))
-		{
-			args.dont_save = 1;
-		}
 		else
 		{
 			end(
 					"options:\n"
 							"\t-h\thost\n"
 							"\t-q\tquality, 0-100\n"
-							"\t-d\tdirectory\n"
 							"\t-f\tfont name\n"
 							"\t-c\tcolor in ARGB hex code\n"
 							"\t-s\tsecondary color\n"
 			);
 		}
-	}
-
-	if (args.directory[strlen(args.directory) - 1] != '/')
-	{
-		// easier to work with
-		strcat(args.directory, "/");
 	}
 
 	if (!strcmp(args.fontname, "random"))

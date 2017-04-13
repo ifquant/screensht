@@ -5,6 +5,7 @@
 #include <time.h>
 #include <string.h>
 #include <libnotify/notify.h>
+#include <X11/Xlib.h>
 
 #include "area.h"
 #include "display_info.h"
@@ -16,14 +17,13 @@
 
 void notify(char* url, float time)
 {
-	printf("%s\nupload took %3.f ms\n", url, time);
-
 	char buffer[256];
 	sprintf(buffer, "upload took %3.f ms", time);
+	printf("%s\n", buffer);
 
 	notify_init(url);
 	NotifyNotification* n = notify_notification_new(url, buffer, 0);
-	notify_notification_set_timeout(n, 2500);
+	notify_notification_set_timeout(n, 4000);
 	notify_notification_show(n, 0);
 	g_object_unref(G_OBJECT(n));
 }
@@ -59,7 +59,7 @@ char* get_filename()
 	sprintf(
 			buffer,
 			"%sscreensht_%04d-%02d-%02d_%02d.%02d.%02d_%s.jpg",
-			args.directory,
+			"./",
 			1900 + tm.tm_year,
 			1 + tm.tm_mon,
 			tm.tm_mday,
@@ -90,6 +90,7 @@ void mkpath(char* path)
 	}
 }
 
+/*
 void check_path()
 {
 	struct stat st;
@@ -103,6 +104,7 @@ void check_path()
 		printf("directory path %s found\n", args.directory);
 	}
 }
+*/
 
 void sigint_handler(int i)
 {
@@ -119,34 +121,29 @@ int main(int argc, char** argv)
 	display_info_init();
 	args_init(argc, argv);
 
-	check_path();
-	char* filename = get_filename();
 	area_t area = select_area();
 
 	if (area_is_null(area))
 	{
 		printf("area is null\n");
 		display_info_kill(&display_info);
-		free(filename);
 		return 0;
 	}
 
 	struct timeval start;
 	gettimeofday(&start, 0);
-	capture_sht(area, filename);
-	char* url = upload_sht(filename);
+
+	unsigned long size = 0;
+	unsigned char* buffer = capture_sht(area, &size);
+	char* url = upload_sht(buffer, size);
+	free(buffer);
+
 	float elapsed = get_elapsed(start);
 	notify(url, elapsed);
 	copy_to_clipboard(url);
 
-	if (args.dont_save)
-	{
-		remove(filename);
-	}
-
 	display_info_kill(&display_info);
 	free(url);
-	free(filename);
 
 	return 0;
 }

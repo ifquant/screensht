@@ -7,11 +7,9 @@ typedef struct
 {
 	host_t host;
 	int quality;
-	char* directory;
 	char* fontname;
 	unsigned long color;
 	unsigned long color_secondary;
-	int dont_save;
 } args_t;
 
 void args_init(int argc, char** argv);
