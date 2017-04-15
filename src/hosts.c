@@ -83,12 +83,12 @@ const host_t hosts[] = {
 				.form_name = "files[]",
 				.json_url_key = "url"
 		},
-		{
-				.arg_name = "aww.moe",
-				.upload_url = "https://u.aww.moe/upload",
-				.form_name = "files[]",
-				.json_url_key = "fullurl"
-		},
+//		{
+//				.arg_name = "aww.moe",
+//				.upload_url = "https://u.aww.moe/upload",
+//				.form_name = "files[]",
+//				.json_url_key = "fullurl"
+//		},
 		{
 				.arg_name = "pomf.space",
 				.upload_url = "https://pomf.space/upload.php",
