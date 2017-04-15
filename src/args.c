@@ -15,7 +15,8 @@ arg_t args[] = {
 		{ "-f", "--font", .ptr = &arg_values.font, .type = TYPE_CHARPTR },
 		{ "-c", "--color", .ptr = &arg_values.color, .type = TYPE_ULONG },
 		{ "-s", "--secondary-color", .ptr = &arg_values.secondary_color, .type = TYPE_ULONG },
-		{ "-k", "--keep", .ptr = &arg_values.keep, .type = TYPE_CHARPTR }
+		{ "-k", "--keep", .ptr = &arg_values.keep, .type = TYPE_CHARPTR },
+		{ "-n", "--form-filename", .ptr = &arg_values.form_filename, .type = TYPE_CHARPTR }
 };
 int n_args = sizeof(args) / sizeof(args[0]);
 
@@ -82,6 +83,7 @@ void args_init(int argc, char** argv)
 	arg_values.color = 0xfff0f0f0; // ARGB
 	arg_values.secondary_color = 0xff000000;
 	arg_values.keep = "";
+	arg_values.form_filename = "screensht.jpg";
 
 	if (argc <= 1)
 	{

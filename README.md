@@ -80,6 +80,14 @@ A simple and quick selection screenshot uploader for Linux written in C using Xl
 		screensht -k ./
 		screensht -k ~/screenshots
 
+* ### -n, --form-filename
+
+	The filename that the screenshot is going to be uploaded with, can be used to get unusual file extensions. These may not work on some hosts.
+
+	###### Default: `screensht.jpg`
+
+		screensht -n example.cool
+
 ## Compatibility Mode
 
 If you don't have a composite manager installed, you won't be able to use some features such as colors and the selection might glitch out once in a while. To combat that, install one of [these](https://wiki.archlinux.org/index.php/Xorg#Composite).

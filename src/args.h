@@ -27,6 +27,7 @@ typedef struct
 	unsigned long color;
 	unsigned long secondary_color;
 	char* keep;
+	char* form_filename;
 } arg_values_t;
 
 void args_init(int argc, char** argv);

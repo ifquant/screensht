@@ -41,7 +41,7 @@ char* upload_sht(unsigned char* file_buffer, unsigned long size)
 			CURLFORM_COPYNAME,
 			arg_values.host.form_name,
 			CURLFORM_BUFFER,
-			"screensht.jpg",
+			arg_values.form_filename,
 			CURLFORM_BUFFERPTR,
 			file_buffer,
 			CURLFORM_BUFFERLENGTH,
