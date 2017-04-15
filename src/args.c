@@ -110,11 +110,6 @@ void args_init(int argc, char** argv)
 		}
 	}
 
-	if (arg_values.keep[strlen(arg_values.keep) - 1] != '/')
-	{
-		strcat(arg_values.keep, "/");
-	}
-
 	if (!strcmp(arg_values.font, "random"))
 	{
 		int fonts_n;

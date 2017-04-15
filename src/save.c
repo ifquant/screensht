@@ -29,10 +29,18 @@ char* get_filename()
 	struct tm tm = *localtime(&t);
 	char buffer[128];
 	char* rand = rand_string(4);
+	char dir_buff[256];
+	strcpy(dir_buff, arg_values.keep);
+
+	if (dir_buff[strlen(dir_buff) - 1] != '/')
+	{
+		strcat(dir_buff, "/");
+	}
+
 	sprintf(
 			buffer,
 			"%sscreensht_%04d-%02d-%02d_%02d.%02d.%02d_%s.jpg",
-			arg_values.keep,
+			dir_buff,
 			1900 + tm.tm_year,
 			1 + tm.tm_mon,
 			tm.tm_mday,
