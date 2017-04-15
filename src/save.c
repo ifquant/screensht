@@ -10,7 +10,7 @@
 
 char* rand_string(int n)
 {
-	char chars[] = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm";
+	char chars[] = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm0123456789";
 	char* result = malloc(sizeof(char) * (n - 1));
 
 	for (int i = 0; i < n; i++)

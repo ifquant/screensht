@@ -82,11 +82,12 @@ A simple and quick selection screenshot uploader for Linux written in C using Xl
 
 * ### -n, --form-filename
 
-	The filename that the screenshot is going to be uploaded with, can be used to get unusual file extensions. These may not work on some hosts.
+	The filename that the screenshot is going to be uploaded with, can be used to get unusual file extensions. These may not work on some hosts. "Random" for a random filename.
 
 	###### Default: `screensht.jpg`
 
 		screensht -n example.cool
+		screensht -n random
 
 ## Compatibility Mode
 

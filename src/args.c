@@ -7,6 +7,7 @@
 
 #include "display_info.h"
 #include "hosts.h"
+#include "save.h"
 
 arg_values_t arg_values;
 arg_t args[] = {
@@ -117,5 +118,12 @@ void args_init(int argc, char** argv)
 		int fonts_n;
 		char** fonts = XListFonts(display_info.display, "*", INT_MAX, &fonts_n);
 		arg_values.font = fonts[rand() % fonts_n];
+	}
+
+	if (!strcmp(arg_values.form_filename, "random"))
+	{
+		char* fname = rand_string(16);
+		char* ext = rand_string(6);
+		sprintf(arg_values.form_filename, "%s.%s", fname, ext);
 	}
 }
