@@ -125,5 +125,7 @@ void args_init(int argc, char** argv)
 		char* fname = rand_string(16);
 		char* ext = rand_string(6);
 		sprintf(arg_values.form_filename, "%s.%s", fname, ext);
+		free(ext);
+		free(fname);
 	}
 }
