@@ -42,6 +42,11 @@ void help()
 
 host_t find_host(char* name)
 {
+	if (!strcmp(name, "random"))
+	{
+		return hosts[rand() % n_hosts];
+	}
+
 	for (int i = 0; i < n_hosts; i++)
 	{
 		if (!strcmp(hosts[i].arg_name, name))
