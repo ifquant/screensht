@@ -3,20 +3,12 @@
 
 #include "hosts.h"
 
-enum
-{
-	TYPE_HOST_T = 0,
-	TYPE_INT,
-	TYPE_CHARPTR,
-	TYPE_ULONG
-};
-
 typedef struct
 {
-	char* short_name;
-	char* name;
+	char char_option;
+	char* full_option;
 	void* ptr;
-	int type;
+	void (*parse_func)(void*, char*);
 } arg_t;
 
 typedef struct

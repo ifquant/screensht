@@ -55,21 +55,23 @@ A simple and quick selection screenshot uploader for Linux written in C using Xl
 
 * ### -c, --color
 
-	Main color in ARGB hex format.
+	Main color in ARGB hex format. "Random" for random color.
 
 	###### Default: `fff0f0f0`
 
 		screensht -c ffaa00ff
 		screensht -c 0xffaa00ff
+		screensht -c random
 
 * ### -s, --secondary-color
 
-	Secondary color.
+	Secondary color. "Random" for random color.
 
 	###### Default: `ff000000`
 
 		screensht -s ffffffff
 		screensht -s 0xffffffff
+		screensht -s random
 
 * ### -k, --keep
 
