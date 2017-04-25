@@ -100,7 +100,8 @@ arg_t args[] = {
 		{ 'c', "--color", &arg_values.color, &parse_color },
 		{ 's', "--secondary-color", &arg_values.secondary_color, &parse_color },
 		{ 'k', "--keep", &arg_values.keep, &parse_charptr },
-		{ 'n', "--form-filename", &arg_values.form_filename, &parse_form_filename } 
+		{ 'n', "--form-filename", &arg_values.form_filename, &parse_form_filename },
+		{ 'v', "--verbose", &arg_values.verbose, 0 }
 };
 int n_args = sizeof(args) / sizeof(args[0]);
 
@@ -132,9 +133,16 @@ int test_arg(char* arg_provided, char* next_arg)
 			continue;
 		}
 
-		args[i].parse_func(args[i].ptr, next_arg);
-
-		return 1;
+		if (args[i].parse_func)
+		{
+			args[i].parse_func(args[i].ptr, next_arg);
+			return 1;
+		}
+		else
+		{
+			*(int*)args[i].ptr = 1;
+			return 0;
+		}
 	}
 
 	return 0;
@@ -149,6 +157,7 @@ void args_init(int argc, char** argv)
 	arg_values.secondary_color = 0xff000000;
 	arg_values.keep = "";
 	arg_values.form_filename = "screensht.jpg";
+	arg_values.verbose = 0;
 
 	if (argc <= 1)
 	{

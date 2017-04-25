@@ -7,6 +7,7 @@
 #include <time.h>
 
 #include "args.h"
+#include "log.h"
 
 char* rand_string(int n)
 {
@@ -69,12 +70,12 @@ void check_path(char* path)
 
 	if (stat(path, &st) == -1)
 	{
-		printf("creating directory path %s\n", path);
+		log_info("creating directory path %s\n", path);
 		mkpath(path);
 	}
 	else
 	{
-		printf("directory path %s found\n", path);
+		log_info("directory path %s found\n", path);
 	}
 }
 

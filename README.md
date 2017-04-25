@@ -91,6 +91,14 @@ A simple and quick selection screenshot uploader for Linux written in C using Xl
 		screensht -n example.cool
 		screensht -n random
 
+* ### -v, --verbose
+
+	Will output info if enabled.
+
+	###### Default: `Disabled`
+
+		screensht -v
+
 ## Compatibility Mode
 
 If you don't have a composite manager installed, you won't be able to use some features such as colors and the selection might glitch out once in a while. To combat that, install one of [these](https://wiki.archlinux.org/index.php/Xorg#Composite).

@@ -64,7 +64,12 @@ char* upload_sht(unsigned char* file_buffer, unsigned long size)
 	curl_easy_setopt(curl, CURLOPT_URL, arg_values.host.upload_url);
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, memory_callback);
 	curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*)&buffer);
-	curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+
+	if (arg_values.verbose)
+	{
+		curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+	}
+
 	curl_easy_setopt(curl, CURLOPT_HTTPPOST, post);
 
 	curl_multi_add_handle(multi, curl);

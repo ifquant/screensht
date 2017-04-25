@@ -6,6 +6,7 @@
 
 #include "jsmn/jsmn.h"
 #include "args.h"
+#include "log.h"
 
 const host_t hosts[] = {
 		{
@@ -160,9 +161,9 @@ jsmntok_t* get_tokens(char* json, int* n_tokens)
 
 	while (code == JSMN_ERROR_NOMEM)
 	{
-		printf("expanding tokens buffer from %d to ", size);
+		log_info("expanding tokens buffer from %d to ", size);
 		size *= 2;
-		printf("%d\n", size);
+		log_info("%d\n", size);
 		tokens = realloc(tokens, sizeof(jsmntok_t) * size);
 		code = jsmn_parse(&parser, json, strlen(json), tokens, (unsigned int)size);
 	}
@@ -182,7 +183,7 @@ char* get_text_by_key(char *json, char* key)
 	int n_tokens = 0;
 	jsmntok_t* tokens = get_tokens(json, &n_tokens);
 
-	printf("%d tokens allocated\n", n_tokens);
+	log_info("%d tokens allocated\n", n_tokens);
 
 	for (int i = 0; i < n_tokens; i++)
 	{
@@ -202,7 +203,7 @@ char* get_text_by_key(char *json, char* key)
 
 char* parse_response(char* response)
 {
-	printf("raw:\n%s\n", response);
+	log_info("raw:\n%s\n", response);
 
 	char* result = malloc(strlen(response));
 	char* url_key = arg_values.host.json_url_key;
@@ -232,7 +233,7 @@ char* parse_response(char* response)
 	free(response);
 	strip_unwanted_chars(result);
 
-	printf("parsed:\n%s\n", result);
+	log_info("parsed:\n%s\n", result);
 
 	return result;
 }

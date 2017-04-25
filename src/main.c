@@ -14,12 +14,13 @@
 #include "capture.h"
 #include "upload.h"
 #include "save.h"
+#include "log.h"
 
 void notify(char* url, float time)
 {
 	char buffer[256];
 	sprintf(buffer, "upload took %3.f ms", time);
-	printf("%s\n", buffer);
+	log_info("%s\n", buffer);
 
 	notify_init(url);
 	NotifyNotification* n = notify_notification_new(url, buffer, 0);
@@ -62,7 +63,7 @@ int main(int argc, char** argv)
 
 	if (area_is_null(area))
 	{
-		printf("area is null\n");
+		log_info("area is null\n");
 		display_info_kill(&display_info);
 		return 0;
 	}
