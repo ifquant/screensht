@@ -1,11 +1,9 @@
 #include "save.h"
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/stat.h>
 #include <string.h>
 #include <time.h>
-
 #include "args.h"
 #include "log.h"
 

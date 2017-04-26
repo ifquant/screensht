@@ -1,6 +1,4 @@
-#ifndef DISPLAY_INFO_H
-#define DISPLAY_INFO_H
-
+#pragma once
 #include <X11/Xutil.h>
 
 typedef struct
@@ -15,5 +13,3 @@ void display_info_init();
 void display_info_kill(display_info_t* info);
 
 display_info_t display_info;
-
-#endif

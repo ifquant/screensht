@@ -5,7 +5,6 @@
 #include <string.h>
 #include <libnotify/notify.h>
 #include <X11/Xlib.h>
-
 #include "area.h"
 #include "display_info.h"
 #include "window_info.h"

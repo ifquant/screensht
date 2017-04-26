@@ -1,6 +1,4 @@
-#ifndef AREA_H
-#define AREA_H
-
+#pragma once
 #include "vec2.h"
 
 typedef struct
@@ -14,5 +12,3 @@ typedef struct
 int area_is_null(area_t area);
 area_t area_null();
 area_t area_positions_to_area(vec2_t p1, vec2_t p2);
-
-#endif

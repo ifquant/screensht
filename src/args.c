@@ -1,12 +1,9 @@
-#include "args.h"
-
 #define _GNU_SOURCE
-
+#include "args.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <limits.h>
-
 #include "display_info.h"
 #include "hosts.h"
 #include "save.h"

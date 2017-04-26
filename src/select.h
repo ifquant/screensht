@@ -1,8 +1,4 @@
-#ifndef SELECT_H
-#define SELECT_H
-
+#pragma once
 #include "area.h"
 
 area_t select_area();
-
-#endif

@@ -1,6 +1,4 @@
-#ifndef ARGS_H
-#define ARGS_H
-
+#pragma once
 #include "hosts.h"
 
 typedef struct
@@ -27,5 +25,3 @@ void args_init(int argc, char** argv);
 
 extern arg_t args[];
 extern arg_values_t arg_values;
-
-#endif

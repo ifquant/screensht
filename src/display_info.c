@@ -1,5 +1,4 @@
 #include "display_info.h"
-
 #include <stdio.h>
 
 int has_composite_manager()

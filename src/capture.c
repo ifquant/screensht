@@ -1,10 +1,8 @@
 #include "capture.h"
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <X11/Xutil.h>
 #include <jpeglib.h>
-
 #include "display_info.h"
 #include "args.h"
 

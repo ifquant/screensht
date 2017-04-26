@@ -1,6 +1,4 @@
-#ifndef WINDOW_INFO_H
-#define WINDOW_INFO_H
-
+#pragma once
 #include <X11/Xutil.h>
 #include "vec2.h"
 
@@ -17,5 +15,3 @@ void window_info_init();
 void window_info_kill(window_info_t* info);
 
 window_info_t window_info;
-
-#endif

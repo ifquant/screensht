@@ -1,7 +1,5 @@
 #include "window_info.h"
-
 #include <stdio.h>
-
 #include "display_info.h"
 #include "args.h"
 

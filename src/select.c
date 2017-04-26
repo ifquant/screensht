@@ -1,11 +1,9 @@
 #include "select.h"
-
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <X11/Xutil.h>
 #include <X11/cursorfont.h>
-
 #include "display_info.h"
 #include "window_info.h"
 #include "args.h"
