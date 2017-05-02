@@ -1,4 +1,4 @@
-![screensht](http://i.imgur.com/Xb18RmX.png)
+<p align="center"><img src="http://i.imgur.com/EVygoVw.jpg"></p>
 
 # screensht
 
