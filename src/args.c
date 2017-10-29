@@ -149,7 +149,7 @@ void args_init(int argc, char** argv)
 {
 	arg_values.host = hosts[0];
 	arg_values.quality = 99;
-	arg_values.font = "*x14";
+	arg_values.font = "fixed";
 	arg_values.color = 0xfff0f0f0;
 	arg_values.secondary_color = 0xff000000;
 	arg_values.keep = "";
